@@ -1,0 +1,63 @@
+{
+  "name": "allinone",
+  "description": "OpenStack Essex All In One",
+  "cookbook_versions": {
+  },
+  "json_class": "Chef::Environment",
+  "chef_type": "environment",
+  "default_attributes": {
+  },
+  "override_attributes": {
+    "regions_manage": "",
+    "rabbitmq": {
+      "username": "queuepzj3r",
+      "password": "7qzpobaifh"
+    },
+    "os_networks": {
+      "management": "192.1.0.0/16",
+      "pubic": "114.114.114.0/24"
+    },
+    "keystone": {
+      "glance_user": {
+        "username": "glancec5wqk",
+        "password": "noefhgcp15"
+      },
+      "admin_user": {
+        "username": "adminqbyjk",
+        "password": "bm78ivuaes"
+      },
+      "admin_token": "5tv87lexopcqzf4isa3mu2k0",
+      "db": {
+        "username": "keydb1fuhv",
+        "password": "keydb1fuhv"
+      },
+      "regions": {
+        "RegionOne": "localhost"
+      },
+      "nova_user": {
+        "username": "nova0trac",
+        "password": "629u3cmpkh"
+      }
+    },
+    "nova": {
+      "nova_interface": {
+        "private": "em2"
+      },
+      "manage_interface": "em1",
+      "virt_type": "kvm",
+      "db": {
+        "username": "novadbbmrkd",
+        "password": "snzem2orqy"
+      },
+      "fixed_range": "10.1.0.0/16"
+    },
+    "glance": {
+      "db": {
+        "username": "glancedb0bya3",
+        "password": "nj2wgzpbi1"
+      }
+    },
+    "nodes_manage": "",
+    "id": "1"
+  }
+}

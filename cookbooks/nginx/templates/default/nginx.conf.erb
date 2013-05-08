@@ -1,0 +1,45 @@
+user nginx;
+worker_processes 160;
+error_log /var/log/nginx/nginx.log;
+pid /var/run/nginx.pid;
+events {
+        worker_connections 1024;
+}
+http {
+        log_format main
+        '$remote_addr - $remote_user [<><esc>iime_local] '
+        '"$request" $status $bytes_sent '
+        '"$http_referer" "$http_user_agent" '
+        '"$gzip_ratio"';
+        include /usr/local/nginx/conf/mime.types;
+        default_type application/octet-stream;
+        access_log /var/log/nginx/access.log;
+        keepalive_timeout 600;
+        proxy_read_timeout 200;
+        client_header_timeout  3m;
+        client_body_timeout    3m;
+        send_timeout           3m;
+        connection_pool_size        256;
+        client_header_buffer_size    32k;
+        large_client_header_buffers    4 32k;
+        request_pool_size        4k;
+        output_buffers   4 32k;
+        postpone_output  1460;
+        sendfile        on;
+        tcp_nopush             on;
+        tcp_nodelay            on;
+        client_max_body_size       50m;
+        client_body_buffer_size    256k;
+        gzip on;
+        gzip_min_length 1000;
+        gzip_proxied any;
+        gzip_types text/plain text/css text/xml
+        application/x-javascript application/xml
+        application/atom+xml text/javascript;
+        proxy_next_upstream error;
+        include          vhosts/*.conf;
+}
+
+tcp{
+  timeout 600000;
+}

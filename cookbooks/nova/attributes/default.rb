@@ -1,0 +1,10 @@
+default[:nova][:scheduler_driver]  = 'nova.scheduler.multi.MultiScheduler'
+default[:nova][:network_manager] = 'nova.network.manager.FlatDHCPManager'
+default[:nova][:flat_injected] = 'false'
+default[:nova][:libvirt_inject_password] = 'false'
+default[:nova][:virt_type] = 'kvm'
+default[:nova][:allow_same_net_traffic] = 'true'
+default[:nova][:cpu_allocation_ratio] = 8
+default[:nova][:ram_allocation_ratio] = 1.2
+default[:nova][:state_dir] = "/data/nova"
+default[:nova][:rabbit_durable] = "false"

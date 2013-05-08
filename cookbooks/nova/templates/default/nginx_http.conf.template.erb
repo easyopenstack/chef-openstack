@@ -1,0 +1,23 @@
+    #for $id, $balance in $http_servers.items():
+        upstream $balance["server_name"]$id {
+            ip_hash;
+            #for $server in $balance.__getitem__("servers"):
+                server $server["ipv4"]:$server["port"];
+            #end for
+        }
+        server {
+            #if $balance["public_ip"]:
+                listen      $balance["public_ip"]:$balance["public_port"];
+            #else:
+                listen      $my_ip:$balance["public_port"];
+            #end if
+            #if $balance["server_name"]:
+                server_name  $balance["server_name"];
+            #end if
+            location / {
+            	proxy_set_header Host \$host;
+                proxy_pass http://$balance["server_name"]$id;
+            }
+        }
+    #end for
+

@@ -1,0 +1,17 @@
+server {
+        listen 80;
+        server_name horizon;
+        client_max_body_size 50M;
+        if ( $request_uri ~* (\'|\<|\"|\%00|\%22|\%27|\%3e|\%3c|\%0d|\%c0|%5c|\>|\.svn|CVS\/Entries|\)|\(|\{|\}|\/\*) )  {
+        return 404;
+        }
+        location / {
+                uwsgi_pass unix:/tmp/horizon.sock;
+                include uwsgi_params;
+        }
+        location ~ ^/static/ {
+                root /usr/share/openstack-dashboard;
+                expires 2h;
+                access_log   off;
+        }
+}

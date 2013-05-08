@@ -1,0 +1,9 @@
+[uwsgi]
+socket = /tmp/horizon.sock
+processes = 1
+buffer-size = 8192
+limit-as = 8291
+chdir = /usr/share/openstack-dashboard
+pythonpath = /usr/share/openstack-dashboard/openstack_dashboard
+pythonpath = /usr/share/openstack-dashboard/openstack_dashboard/wsgi
+module = wsgi

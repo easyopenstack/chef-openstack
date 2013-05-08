@@ -1,0 +1,47 @@
+#! /bin/bash
+#
+# py-image .
+#
+# chkconfig: 2345 80 60
+
+
+COMMAND="uwsgi  /usr/share/openstack-dashboard/openstack_dashboard/wsgi/uwsgi.ini"
+SLEEP='sleep 5'
+CHOWN="chown -R daemon /tmp/horizon.sock"
+
+start() {
+    $COMMAND > /dev/null 2>&1 &
+    $SLEEP
+    $CHOWN
+	[ $? -eq 0 ] && echo "start ok!" || echo "failed!";
+    return $?
+}
+
+stop() {
+    for i in `ps -ef | grep "uwsgi" | grep "dashboard" |  awk '{print $2}'`
+    do
+        kill -9 $i
+    done
+    [ $? -eq 0 ] && echo "stop ok!" || echo "stop failed!"
+}
+
+restart() {
+  	stop
+    sleep 1
+	start
+}
+
+case "$1" in
+  start)
+  	start
+	;;
+  stop)
+  	stop
+	;;
+  restart)
+  	restart
+	;;
+  *)
+	echo $"Usage: $0 {start|stop|restart}"
+	exit 1
+esac

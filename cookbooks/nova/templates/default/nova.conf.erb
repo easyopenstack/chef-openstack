@@ -1,0 +1,100 @@
+[DEFAULT]
+
+# LOGS/STATE
+verbose=false
+debug=false
+auth_strategy=keystone
+dhcpbridge_flagfile=/etc/nova/nova.conf
+dhcpbridge=/usr/bin/nova-dhcpbridge
+logdir=/var/log/nova
+use_syslog=false
+state_path=<%= @state_dir %>
+lock_path=/var/lock/nova
+allow_admin_api=True
+api_paste_config=/etc/nova/api-paste.ini
+use_deprecated_auth=False
+auth_strategy=keystone
+root_helper=sudo nova-rootwrap
+
+##### RABBITMQ #####
+rabbit_userid=<%= @rabbit_user %>
+rabbit_password=<%= @rabbit_pass %>
+rabbit_port=5672
+rabbit_host=<%= @rabbit_ipaddress %>
+rabbit_durable_queues=<%= @rabbit_durable  %>
+rabbit_max_retries=0
+
+##### SCHEDULER #####
+# scheduler_manager=nova.scheduler.manager.SchedulerManager
+scheduler_driver=<%= @scheduler_driver %>
+
+##### NETWORK #####
+network_manager=<%= @network_manager %>
+routing_source_ip=<%= @ipaddress %>
+dhcp_lease_time=86400
+multi_host=true
+public_interface=<%= @public_interface %>
+flat_injected=<%= @flat_injected %>
+fixed_range=<%= @fixed_range %>
+force_dhcp_release=true
+send_arp_for_ha=True
+libvirt_use_virtio_for_bridges=true
+
+##### GLANCE #####
+image_service=nova.image.glance.GlanceImageService
+glance_api_servers=<%= @glance_api_ipaddress %>:<%= @glance_api_port %>
+cache_images=true
+
+##### COMPUTE #####
+force_raw_images=false
+libvirt_inject_password=<%= @libvirt_inject_password %>
+img_handlers=loop,guestfs
+compute_manager=nova.compute.manager.ComputeManager
+sql_connection=mysql://<%= @user %>:<%= @passwd %>@<%= @db_ipaddress %>/<%= @db_name %>?charset=utf8
+connection_type=libvirt
+libvirt_type=<%= @virt_type %>
+root_helper=sudo nova-rootwrap
+remove_unused_base_images=true
+remove_unused_original_minimum_age_seconds=86400
+libvirt_disk_prefix=sd
+reclaim_instance_interval=86400
+
+##### VNCPROXY #####
+novnc_enable=True
+novncproxy_base_url=http://<%= @control_node_ip %>:6080/vnc_auto.html
+# This is only required on the server running xvpvncproxy
+vncserver_listen=<%= @vncserver_listen %>
+vncserver_proxyclient_address=<%= @vncserver_listen%>
+
+##### MISC #####
+# force backing images to raw format
+allow_same_net_traffic=<%= @allow_same_net_traffic %>
+
+<%- if /FilterScheduler/.match(@scheduler_driver) or
+       /MultiScheduler/.match(@scheduler_driver) %>
+# FilterScheduler Only Options
+<%- if /ComputeFilter/.match(@scheduler_default_filters) %>
+# virtual CPU to Physical CPU allocation ratio (default: 16.0)
+cpu_allocation_ratio=<%= @cpu_allocation_ratio %>
+<%- end %>
+<%- if /RamFilter/.match(@scheduler_default_filters) %>
+# virtual ram to physical ram allocation ratio (default: 1.5)
+ram_allocation_ratio=<%= @ram_allocation_ratio %>
+<%- end %>
+<%- elsif /SimpleScheduler/.match(@scheduler_driver) %>
+# SimpleScheduler Only Options
+# maximum number of instance cores to allow per host
+max_cores=<% @cpu_allocation_ratio.to_i * node["cpu"]["total"].to_i %>
+<%- end %>
+
+auth_strategy=keystone
+auth_token_ttl=3600
+
+ec2_listen=<%= @control_node_ip%>
+ec2_port=8773
+osapi_compute_listen=<%= @control_node_ip%>
+osapi_compute_listen_port=8774
+metadata_listen=<%= @control_node_ip%>
+metadata_listen_port=8775
+osapi_volume_listen=<%= @control_node_ip%>
+osapi_volume_listen_port=8776

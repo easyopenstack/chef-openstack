@@ -1,0 +1,26 @@
+catalog.RegionOne.identity.publicURL = http://<%=  @ipaddress%>:$(public_port)s/v2.0
+catalog.RegionOne.identity.adminURL = http://<%=  @ipaddress%>:$(admin_port)s/v2.0
+catalog.RegionOne.identity.internalURL = http://<%=  @ipaddress%>:$(public_port)s/v2.0
+catalog.RegionOne.identity.name = Identity Service
+
+<% @regions.each_pair do |k,v|  %>
+<% if v == 'localhost' %>
+<% v = @ipaddress %>
+<% end %>
+catalog.<%= k %>.compute.publicURL = http://<%=  v %>:$(compute_port)s/v1.1/$(tenant_id)s
+catalog.<%= k %>.compute.adminURL = http://<%=  v %>:$(compute_port)s/v1.1/$(tenant_id)s
+catalog.<%= k %>.compute.internalURL = http://<%= v %>:$(compute_port)s/v1.1/$(tenant_id)s
+catalog.<%= k %>.compute.name = Compute Service
+
+
+catalog.<%= k %>.volume.publicURL = http://<%= v %>:8776/v1/$(tenant_id)s
+catalog.<%= k %>.volume.adminURL = http://<%= v %>:8776/v1/$(tenant_id)s
+catalog.<%= k %>.volume.internalURL = http://<%= v %>:8776/v1/$(tenant_id)s
+catalog.<%= k %>.volume.name = Volume Service
+
+
+catalog.<%= k %>.image.publicURL = http://<%= v %>:9292/v1
+catalog.<%= k %>.image.adminURL = http://<%= v %>:9292/v1
+catalog.<%= k %>.image.internalURL = http://<%= v %>:9292/v1
+catalog.<%= k %>.image.name = Image Service
+<% end %>
